@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <link href="./tile-world.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+    <div class="cont">
+        <canvas></canvas>
+    </div>
+
+</body>
+
+
+
+<script>
+    let color = ['#e0e0e0', ' #ff4d4d', '#ff1aff', '#1aff1a', '#1affff', '#c36c36']
+    let map = []
+    let posX = 0;
+    let posY = 0;
+    var buffer, context, size;
+    buffer = document.createElement("canvas").getContext("2d");
+    context = document.querySelector("canvas").getContext("2d");
+    size = 20;
+
+    for (let i = 0; i < 600; i++) {
+        if (posX == 30) {
+            posX = 0;
+        }
+        if (i % 30 == 0 && i != 0) {
+            posY++;
+        }
+        map.push({ 'id': i, 'color': color[Math.round(Math.random() * 4)], 'position': [posX, posY] })
+        posX++;
+    }
+
+
+    buffer.canvas.width = 30 * size;
+    buffer.canvas.height = 20 * size;
+
+    const drawMap = () => {
+
+        for (let index = 0; index < map.length; index++) {
+            buffer.fillStyle = '#000';
+            buffer.fillRect((map[index].position[0] * size) - (1), (map[index].position[1] * size) - (1), size + (1 * 2), size + (1 * 2));
+            // buffer.fillText(map[index].id, (map[index].position[0] * size), (map[index].position[1] * size));
+
+            buffer.fillStyle = map[index].color;
+            buffer.fillRect((map[index].position[0] * size), (map[index].position[1] * size), size, size);
+
+        }
+        context.drawImage(buffer.canvas, 0, 0, buffer.canvas.width, buffer.canvas.height, 0, 0, context.canvas.width, context.canvas.height);
+        document.querySelector("canvas").addEventListener('click', (e) => {
+            const { x, y } = e.target.getBoundingClientRect();
+            const mouseX = e.clientX - x;
+            const mouseY = e.clientY - y;
+            for(let i of map){
+                if(i.position[0] == Math.floor(mouseX / 20) && i.position[1] == Math.floor(mouseY / 20) ){
+                    console.log(`id = ${i.id} & posX = ${i.position[0]} &  posY = ${i.position[1]} `)
+                }
+            }
+        })
+
+    };
+    // drawMap();
+
+
+
+
+
+
+
+
+    // just keeps the canvas element sized appropriately
+    resize = function (event) {
+
+        context.canvas.width = Math.floor(document.documentElement.clientWidth - 32);
+
+        if (context.canvas.width > document.documentElement.clientHeight) {
+
+            context.canvas.width = Math.floor(document.documentElement.clientHeight);
+
+        }
+
+        context.canvas.height = Math.floor(context.canvas.width * 0.5625);
+
+        drawMap();
+
+    };
+
+    window.addEventListener("resize", resize, { passive: true });
+
+    resize();
+
+</script>
+
+
+
+</html>
