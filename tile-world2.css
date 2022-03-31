@@ -10,9 +10,10 @@
     width: 100%;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 100px;
+    padding-top: 20px;
   }
   
   canvas {
@@ -21,4 +22,8 @@
     border-top: 1px solid #000;
     border-left: 1px solid #000;
   
+  }
+
+  .detail {
+    margin-bottom: 50px;
   }
